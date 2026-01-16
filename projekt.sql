@@ -15,6 +15,7 @@ CREATE TABLE `Bilety_Definicje`  (
 
 INSERT INTO `Bilety_Definicje` VALUES (1, 'Miejski (Strefa 1)', 1, 4.00, 20);
 INSERT INTO `Bilety_Definicje` VALUES (2, 'Aglomeracyjny (Strefa 2)', 2, 6.00, 60);
+INSERT INTO `Bilety_Definicje` VALUES (3, 'Nocny (Strefa 1)', 1, 5.00, 30);
 
 DROP TABLE IF EXISTS `Bilety_Sprzedane`;
 CREATE TABLE `Bilety_Sprzedane`  (
@@ -44,6 +45,9 @@ INSERT INTO `Bilety_Sprzedane` VALUES (2, 'QR-ANNA-STARY', 2, 1, 2, '2026-01-08 
 INSERT INTO `Bilety_Sprzedane` VALUES (3, 'QR-PIOTR-ZLA-STREFA', 3, 1, 3, '2026-01-08 01:06:28', '2026-01-01 00:00:00', '2026-12-31 00:00:00');
 INSERT INTO `Bilety_Sprzedane` VALUES (4, 'QR-101201910047968569', 1, 1, 1, '2026-01-16 21:46:12', '2026-01-16 21:46:12', '2026-01-16 22:06:12');
 INSERT INTO `Bilety_Sprzedane` VALUES (5, 'QR-101201910047968570', 1, 1, 1, '2026-01-16 21:47:40', '2026-01-16 21:47:40', '2026-01-16 22:07:40');
+INSERT INTO `Bilety_Sprzedane` VALUES (6, 'QR-MARIA-AGLO', 4, 2, 1, '2026-01-10 11:00:00', '2026-01-10 11:00:00', '2026-01-10 12:00:00');
+INSERT INTO `Bilety_Sprzedane` VALUES (7, 'QR-TOMEK-STUD', 5, 1, 2, '2026-01-12 15:00:00', '2026-01-12 15:00:00', '2026-01-12 15:20:00');
+INSERT INTO `Bilety_Sprzedane` VALUES (8, 'QR-KASIA-BLIK', 6, 1, 1, '2026-01-14 10:00:00', '2026-01-14 10:00:00', '2026-01-14 10:20:00');
 
 DROP TABLE IF EXISTS `Kontrole_Biletow`;
 CREATE TABLE `Kontrole_Biletow`  (
@@ -64,6 +68,8 @@ CREATE TABLE `Kontrole_Biletow`  (
 
 INSERT INTO `Kontrole_Biletow` VALUES (1, '2026-01-08 01:14:10', 1, 1, 2, 'MANDAT: 125.00 PLN (Zastosowano ulgę pasażera)');
 INSERT INTO `Kontrole_Biletow` VALUES (2, '2026-01-08 01:14:10', 1, 2, 3, 'MANDAT: 157.50 PLN (Zastosowano ulgę pasażera)');
+INSERT INTO `Kontrole_Biletow` VALUES (3, '2026-01-10 11:30:00', 2, 4, 6, 'BILET WAŻNY - Dziękujemy');
+INSERT INTO `Kontrole_Biletow` VALUES (4, '2026-01-14 10:25:00', 3, 5, 8, 'MANDAT: 250.00 PLN (Zastosowano ulgę pasażera)');
 
 DROP TABLE IF EXISTS `Kontrolerzy`;
 CREATE TABLE `Kontrolerzy`  (
@@ -77,6 +83,8 @@ CREATE TABLE `Kontrolerzy`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Kontrolerzy` VALUES (1, 'K-100', 'Robert', 'Srogi', 1);
+INSERT INTO `Kontrolerzy` VALUES (2, 'K-101', 'Ewa', 'Rzetelna', 1);
+INSERT INTO `Kontrolerzy` VALUES (3, 'K-102', 'Marek', 'Sprawny', 1);
 
 DROP TABLE IF EXISTS `Pasazerowie`;
 CREATE TABLE `Pasazerowie`  (
@@ -95,6 +103,9 @@ CREATE TABLE `Pasazerowie`  (
 INSERT INTO `Pasazerowie` VALUES (1, 'Jan', 'Kowalski', 'jan.kowalski@mail.com', 1, '2026-01-08 01:06:28');
 INSERT INTO `Pasazerowie` VALUES (2, 'Anna', 'Nowak', 'anna.stud@uczelnia.pl', 2, '2026-01-08 01:06:28');
 INSERT INTO `Pasazerowie` VALUES (3, 'Piotr', 'Zieliński', 'piotr.z@emerytura.pl', 3, '2026-01-08 01:06:28');
+INSERT INTO `Pasazerowie` VALUES (4, 'Maria', 'Wiśniewska', 'maria.w@firma.pl', 1, '2026-01-10 10:30:00');
+INSERT INTO `Pasazerowie` VALUES (5, 'Tomasz', 'Lewandowski', 'tomek.lew@student.edu.pl', 2, '2026-01-12 14:15:00');
+INSERT INTO `Pasazerowie` VALUES (6, 'Katarzyna', 'Wójcik', 'k.wojcik@poczta.pl', 1, '2026-01-14 09:45:00');
 
 DROP TABLE IF EXISTS `Platnosci`;
 CREATE TABLE `Platnosci`  (
@@ -117,6 +128,9 @@ INSERT INTO `Platnosci` VALUES (2, 2, 1.85, 8.00, 2.00, 1, '2026-01-08 01:06:28'
 INSERT INTO `Platnosci` VALUES (3, 3, 2.33, 8.00, 2.52, 1, '2026-01-08 01:06:28');
 INSERT INTO `Platnosci` VALUES (4, 4, 3.70, 8.00, 4.00, 1, '2026-01-16 21:46:12');
 INSERT INTO `Platnosci` VALUES (5, 5, 3.70, 8.00, 4.00, 1, '2026-01-16 21:47:40');
+INSERT INTO `Platnosci` VALUES (6, 6, 5.56, 8.00, 6.00, 2, '2026-01-10 11:00:00');
+INSERT INTO `Platnosci` VALUES (7, 7, 1.85, 8.00, 2.00, 1, '2026-01-12 15:00:00');
+INSERT INTO `Platnosci` VALUES (8, 8, 3.70, 8.00, 4.00, 3, '2026-01-14 10:00:00');
 
 DROP TABLE IF EXISTS `Platnosci_Wezwan`;
 CREATE TABLE `Platnosci_Wezwan`  (
@@ -150,6 +164,9 @@ CREATE TABLE `Pojazdy`  (
 
 INSERT INTO `Pojazdy` VALUES (1, 'TRAM-01', 1, 1);
 INSERT INTO `Pojazdy` VALUES (2, 'BUS-02', 2, 2);
+INSERT INTO `Pojazdy` VALUES (3, 'TRAM-05', 3, 6);
+INSERT INTO `Pojazdy` VALUES (4, 'BUS-15', 4, 5);
+INSERT INTO `Pojazdy` VALUES (5, 'TRAM-02', 1, 3);
 
 DROP TABLE IF EXISTS `Przystanki`;
 CREATE TABLE `Przystanki`  (
@@ -164,6 +181,10 @@ CREATE TABLE `Przystanki`  (
 
 INSERT INTO `Przystanki` VALUES (1, 'Centrum Handlowe', 1, ST_GeomFromText('POINT(19.9 50)'));
 INSERT INTO `Przystanki` VALUES (2, 'Pętla Podmiejska', 2, ST_GeomFromText('POINT(19.8 50.1)'));
+INSERT INTO `Przystanki` VALUES (3, 'Dworzec Główny', 1, ST_GeomFromText('POINT(19.95 50.05)'));
+INSERT INTO `Przystanki` VALUES (4, 'Uniwersytet', 1, ST_GeomFromText('POINT(19.92 50.02)'));
+INSERT INTO `Przystanki` VALUES (5, 'Stadion', 2, ST_GeomFromText('POINT(19.85 50.08)'));
+INSERT INTO `Przystanki` VALUES (6, 'Rynek', 1, ST_GeomFromText('POINT(19.93 50.06)'));
 
 DROP TABLE IF EXISTS `Slownik_Metod_Platnosci`;
 CREATE TABLE `Slownik_Metod_Platnosci`  (
@@ -174,6 +195,7 @@ CREATE TABLE `Slownik_Metod_Platnosci`  (
 
 INSERT INTO `Slownik_Metod_Platnosci` VALUES (1, 'Aplikacja');
 INSERT INTO `Slownik_Metod_Platnosci` VALUES (2, 'Karta płatnicza');
+INSERT INTO `Slownik_Metod_Platnosci` VALUES (3, 'BLIK');
 
 DROP TABLE IF EXISTS `Slownik_Statusow_Wezwan`;
 CREATE TABLE `Slownik_Statusow_Wezwan`  (
@@ -208,6 +230,7 @@ CREATE TABLE `Slownik_Typow_Linii`  (
 
 INSERT INTO `Slownik_Typow_Linii` VALUES (2, 'Autobus');
 INSERT INTO `Slownik_Typow_Linii` VALUES (1, 'Tramwaj');
+INSERT INTO `Slownik_Typow_Linii` VALUES (3, 'Metro');
 
 DROP TABLE IF EXISTS `Slownik_Ulg`;
 CREATE TABLE `Slownik_Ulg`  (
@@ -220,6 +243,7 @@ CREATE TABLE `Slownik_Ulg`  (
 INSERT INTO `Slownik_Ulg` VALUES (1, 'Normalny', 0.00);
 INSERT INTO `Slownik_Ulg` VALUES (2, 'Student (Legitymacja)', 50.00);
 INSERT INTO `Slownik_Ulg` VALUES (3, 'Senior (65+)', 37.00);
+INSERT INTO `Slownik_Ulg` VALUES (4, 'Dziecko do 4 lat', 100.00);
 
 DROP TABLE IF EXISTS `Trasy`;
 CREATE TABLE `Trasy`  (
@@ -234,6 +258,8 @@ CREATE TABLE `Trasy`  (
 
 INSERT INTO `Trasy` VALUES (1, '10', 1);
 INSERT INTO `Trasy` VALUES (2, '200', 2);
+INSERT INTO `Trasy` VALUES (3, '5', 1);
+INSERT INTO `Trasy` VALUES (4, '150', 2);
 
 DROP TABLE IF EXISTS `Trasy_Przystanki`;
 CREATE TABLE `Trasy_Przystanki`  (
@@ -245,6 +271,16 @@ CREATE TABLE `Trasy_Przystanki`  (
   CONSTRAINT `Trasy_Przystanki_ibfk_1` FOREIGN KEY (`id_trasy`) REFERENCES `Trasy` (`id_trasy`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `Trasy_Przystanki_ibfk_2` FOREIGN KEY (`id_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
+
+INSERT INTO `Trasy_Przystanki` VALUES (1, 1, 1);
+INSERT INTO `Trasy_Przystanki` VALUES (1, 3, 2);
+INSERT INTO `Trasy_Przystanki` VALUES (1, 4, 3);
+INSERT INTO `Trasy_Przystanki` VALUES (2, 2, 1);
+INSERT INTO `Trasy_Przystanki` VALUES (2, 5, 2);
+INSERT INTO `Trasy_Przystanki` VALUES (3, 6, 1);
+INSERT INTO `Trasy_Przystanki` VALUES (3, 3, 2);
+INSERT INTO `Trasy_Przystanki` VALUES (4, 5, 1);
+INSERT INTO `Trasy_Przystanki` VALUES (4, 2, 2);
 
 DROP TABLE IF EXISTS `Wezwania_Do_Zaplaty`;
 CREATE TABLE `Wezwania_Do_Zaplaty`  (
@@ -265,6 +301,7 @@ CREATE TABLE `Wezwania_Do_Zaplaty`  (
 
 INSERT INTO `Wezwania_Do_Zaplaty` VALUES (1, 1, 2, 125.00, '2026-01-22', 2);
 INSERT INTO `Wezwania_Do_Zaplaty` VALUES (2, 2, 3, 157.50, '2026-01-22', 1);
+INSERT INTO `Wezwania_Do_Zaplaty` VALUES (3, 4, 6, 250.00, '2026-01-28', 1);
 
 DROP VIEW IF EXISTS `Raport_Przychodow_Total`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Raport_Przychodow_Total` AS select 'Sprzedaż Biletów' AS `Typ`,sum(`Platnosci`.`kwota_brutto`) AS `Suma` from `Platnosci` union all select 'Wpływy z Mandatów' AS `Typ`,sum(`Platnosci_Wezwan`.`kwota_wplacona`) AS `Suma` from `Platnosci_Wezwan`;
