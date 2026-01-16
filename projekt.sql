@@ -1,9 +1,6 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- ----------------------------
--- Table structure for Bilety_Definicje
--- ----------------------------
 DROP TABLE IF EXISTS `Bilety_Definicje`;
 CREATE TABLE `Bilety_Definicje`  (
   `id_definicji` int(11) NOT NULL AUTO_INCREMENT,
@@ -15,15 +12,9 @@ CREATE TABLE `Bilety_Definicje`  (
   CONSTRAINT `Bilety_Definicje_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Bilety_Definicje
--- ----------------------------
 INSERT INTO `Bilety_Definicje` VALUES (1, 'Miejski (Strefa 1)', 1, 4.00);
 INSERT INTO `Bilety_Definicje` VALUES (2, 'Aglomeracyjny (Strefa 1+2)', NULL, 6.00);
 
--- ----------------------------
--- Table structure for Bilety_Sprzedane
--- ----------------------------
 DROP TABLE IF EXISTS `Bilety_Sprzedane`;
 CREATE TABLE `Bilety_Sprzedane`  (
   `id_biletu` int(11) NOT NULL AUTO_INCREMENT,
@@ -44,16 +35,10 @@ CREATE TABLE `Bilety_Sprzedane`  (
   CONSTRAINT `Bilety_Sprzedane_ibfk_3` FOREIGN KEY (`id_ulgi`) REFERENCES `Slownik_Ulg` (`id_ulgi`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Bilety_Sprzedane
--- ----------------------------
 INSERT INTO `Bilety_Sprzedane` VALUES (1, 'QR-JAN-OK', 1, 1, 1, '2026-01-08 01:06:28', '2026-01-01 00:00:00', '2026-12-31 00:00:00');
 INSERT INTO `Bilety_Sprzedane` VALUES (2, 'QR-ANNA-STARY', 2, 1, 2, '2026-01-08 01:06:28', '2025-01-01 00:00:00', '2025-01-06 00:00:00');
 INSERT INTO `Bilety_Sprzedane` VALUES (3, 'QR-PIOTR-ZLA-STREFA', 3, 1, 3, '2026-01-08 01:06:28', '2026-01-01 00:00:00', '2026-12-31 00:00:00');
 
--- ----------------------------
--- Table structure for Kontrole_Biletow
--- ----------------------------
 DROP TABLE IF EXISTS `Kontrole_Biletow`;
 CREATE TABLE `Kontrole_Biletow`  (
   `id_kontroli` int(11) NOT NULL AUTO_INCREMENT,
@@ -71,15 +56,9 @@ CREATE TABLE `Kontrole_Biletow`  (
   CONSTRAINT `Kontrole_Biletow_ibfk_3` FOREIGN KEY (`id_biletu`) REFERENCES `Bilety_Sprzedane` (`id_biletu`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Kontrole_Biletow
--- ----------------------------
 INSERT INTO `Kontrole_Biletow` VALUES (1, '2026-01-08 01:14:10', 1, 1, 2, 'MANDAT: 125.00 PLN (Zastosowano ulgę pasażera)');
 INSERT INTO `Kontrole_Biletow` VALUES (2, '2026-01-08 01:14:10', 1, 2, 3, 'MANDAT: 157.50 PLN (Zastosowano ulgę pasażera)');
 
--- ----------------------------
--- Table structure for Kontrolerzy
--- ----------------------------
 DROP TABLE IF EXISTS `Kontrolerzy`;
 CREATE TABLE `Kontrolerzy`  (
   `id_kontrolera` int(11) NOT NULL AUTO_INCREMENT,
@@ -91,14 +70,8 @@ CREATE TABLE `Kontrolerzy`  (
   UNIQUE INDEX `numer_sluzbowy`(`numer_sluzbowy` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Kontrolerzy
--- ----------------------------
 INSERT INTO `Kontrolerzy` VALUES (1, 'K-100', 'Robert', 'Srogi', 1);
 
--- ----------------------------
--- Table structure for Pasazerowie
--- ----------------------------
 DROP TABLE IF EXISTS `Pasazerowie`;
 CREATE TABLE `Pasazerowie`  (
   `id_pasazera` int(11) NOT NULL AUTO_INCREMENT,
@@ -113,16 +86,10 @@ CREATE TABLE `Pasazerowie`  (
   CONSTRAINT `Pasazerowie_ibfk_1` FOREIGN KEY (`id_ulgi`) REFERENCES `Slownik_Ulg` (`id_ulgi`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Pasazerowie
--- ----------------------------
 INSERT INTO `Pasazerowie` VALUES (1, 'Jan', 'Kowalski', 'jan.kowalski@mail.com', 1, '2026-01-08 01:06:28');
 INSERT INTO `Pasazerowie` VALUES (2, 'Anna', 'Nowak', 'anna.stud@uczelnia.pl', 2, '2026-01-08 01:06:28');
 INSERT INTO `Pasazerowie` VALUES (3, 'Piotr', 'Zieliński', 'piotr.z@emerytura.pl', 3, '2026-01-08 01:06:28');
 
--- ----------------------------
--- Table structure for Platnosci
--- ----------------------------
 DROP TABLE IF EXISTS `Platnosci`;
 CREATE TABLE `Platnosci`  (
   `id_platnosci` int(11) NOT NULL AUTO_INCREMENT,
@@ -139,16 +106,10 @@ CREATE TABLE `Platnosci`  (
   CONSTRAINT `Platnosci_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Platnosci
--- ----------------------------
 INSERT INTO `Platnosci` VALUES (1, 1, 3.70, 8.00, 4.00, 2, '2026-01-08 01:06:28');
 INSERT INTO `Platnosci` VALUES (2, 2, 1.85, 8.00, 2.00, 1, '2026-01-08 01:06:28');
 INSERT INTO `Platnosci` VALUES (3, 3, 2.33, 8.00, 2.52, 1, '2026-01-08 01:06:28');
 
--- ----------------------------
--- Table structure for Platnosci_Wezwan
--- ----------------------------
 DROP TABLE IF EXISTS `Platnosci_Wezwan`;
 CREATE TABLE `Platnosci_Wezwan`  (
   `id_platnosci_wezwania` int(11) NOT NULL AUTO_INCREMENT,
@@ -163,14 +124,8 @@ CREATE TABLE `Platnosci_Wezwan`  (
   CONSTRAINT `Platnosci_Wezwan_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Platnosci_Wezwan
--- ----------------------------
 INSERT INTO `Platnosci_Wezwan` VALUES (1, 1, 125.00, 2, '2026-01-08 01:15:16');
 
--- ----------------------------
--- Table structure for Pojazdy
--- ----------------------------
 DROP TABLE IF EXISTS `Pojazdy`;
 CREATE TABLE `Pojazdy`  (
   `id_pojazdu` int(11) NOT NULL AUTO_INCREMENT,
@@ -185,15 +140,9 @@ CREATE TABLE `Pojazdy`  (
   CONSTRAINT `Pojazdy_ibfk_2` FOREIGN KEY (`id_aktualnego_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Pojazdy
--- ----------------------------
 INSERT INTO `Pojazdy` VALUES (1, 'TRAM-01', 1, 1);
 INSERT INTO `Pojazdy` VALUES (2, 'BUS-02', 2, 2);
 
--- ----------------------------
--- Table structure for Przystanki
--- ----------------------------
 DROP TABLE IF EXISTS `Przystanki`;
 CREATE TABLE `Przystanki`  (
   `id_przystanku` int(11) NOT NULL AUTO_INCREMENT,
@@ -205,15 +154,9 @@ CREATE TABLE `Przystanki`  (
   CONSTRAINT `Przystanki_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Przystanki
--- ----------------------------
 INSERT INTO `Przystanki` VALUES (1, 'Centrum Handlowe', 1, ST_GeomFromText('POINT(19.9 50)'));
 INSERT INTO `Przystanki` VALUES (2, 'Pętla Podmiejska', 2, ST_GeomFromText('POINT(19.8 50.1)'));
 
--- ----------------------------
--- Table structure for Slownik_Metod_Platnosci
--- ----------------------------
 DROP TABLE IF EXISTS `Slownik_Metod_Platnosci`;
 CREATE TABLE `Slownik_Metod_Platnosci`  (
   `id_metody` int(11) NOT NULL AUTO_INCREMENT,
@@ -221,15 +164,9 @@ CREATE TABLE `Slownik_Metod_Platnosci`  (
   PRIMARY KEY (`id_metody`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Slownik_Metod_Platnosci
--- ----------------------------
 INSERT INTO `Slownik_Metod_Platnosci` VALUES (1, 'Aplikacja');
 INSERT INTO `Slownik_Metod_Platnosci` VALUES (2, 'Karta płatnicza');
 
--- ----------------------------
--- Table structure for Slownik_Statusow_Wezwan
--- ----------------------------
 DROP TABLE IF EXISTS `Slownik_Statusow_Wezwan`;
 CREATE TABLE `Slownik_Statusow_Wezwan`  (
   `id_statusu` int(11) NOT NULL AUTO_INCREMENT,
@@ -238,15 +175,9 @@ CREATE TABLE `Slownik_Statusow_Wezwan`  (
   UNIQUE INDEX `nazwa_statusu`(`nazwa_statusu` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Slownik_Statusow_Wezwan
--- ----------------------------
 INSERT INTO `Slownik_Statusow_Wezwan` VALUES (1, 'Oczekujące');
 INSERT INTO `Slownik_Statusow_Wezwan` VALUES (2, 'Opłacone');
 
--- ----------------------------
--- Table structure for Slownik_Stref
--- ----------------------------
 DROP TABLE IF EXISTS `Slownik_Stref`;
 CREATE TABLE `Slownik_Stref`  (
   `id_strefy` int(11) NOT NULL AUTO_INCREMENT,
@@ -255,15 +186,9 @@ CREATE TABLE `Slownik_Stref`  (
   UNIQUE INDEX `nazwa_strefy`(`nazwa_strefy` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Slownik_Stref
--- ----------------------------
 INSERT INTO `Slownik_Stref` VALUES (1, 'Strefa I - Miasto');
 INSERT INTO `Slownik_Stref` VALUES (2, 'Strefa II - Aglomeracja');
 
--- ----------------------------
--- Table structure for Slownik_Typow_Linii
--- ----------------------------
 DROP TABLE IF EXISTS `Slownik_Typow_Linii`;
 CREATE TABLE `Slownik_Typow_Linii`  (
   `id_typu_linii` int(11) NOT NULL AUTO_INCREMENT,
@@ -272,15 +197,9 @@ CREATE TABLE `Slownik_Typow_Linii`  (
   UNIQUE INDEX `nazwa_typu`(`nazwa_typu` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Slownik_Typow_Linii
--- ----------------------------
 INSERT INTO `Slownik_Typow_Linii` VALUES (2, 'Autobus');
 INSERT INTO `Slownik_Typow_Linii` VALUES (1, 'Tramwaj');
 
--- ----------------------------
--- Table structure for Slownik_Ulg
--- ----------------------------
 DROP TABLE IF EXISTS `Slownik_Ulg`;
 CREATE TABLE `Slownik_Ulg`  (
   `id_ulgi` int(11) NOT NULL AUTO_INCREMENT,
@@ -289,16 +208,10 @@ CREATE TABLE `Slownik_Ulg`  (
   PRIMARY KEY (`id_ulgi`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Slownik_Ulg
--- ----------------------------
 INSERT INTO `Slownik_Ulg` VALUES (1, 'Normalny', 0.00);
 INSERT INTO `Slownik_Ulg` VALUES (2, 'Student (Legitymacja)', 50.00);
 INSERT INTO `Slownik_Ulg` VALUES (3, 'Senior (65+)', 37.00);
 
--- ----------------------------
--- Table structure for Trasy
--- ----------------------------
 DROP TABLE IF EXISTS `Trasy`;
 CREATE TABLE `Trasy`  (
   `id_trasy` int(11) NOT NULL AUTO_INCREMENT,
@@ -310,15 +223,9 @@ CREATE TABLE `Trasy`  (
   CONSTRAINT `Trasy_ibfk_1` FOREIGN KEY (`id_typu_linii`) REFERENCES `Slownik_Typow_Linii` (`id_typu_linii`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Trasy
--- ----------------------------
 INSERT INTO `Trasy` VALUES (1, '10', 1);
 INSERT INTO `Trasy` VALUES (2, '200', 2);
 
--- ----------------------------
--- Table structure for Trasy_Przystanki
--- ----------------------------
 DROP TABLE IF EXISTS `Trasy_Przystanki`;
 CREATE TABLE `Trasy_Przystanki`  (
   `id_trasy` int(11) NOT NULL,
@@ -330,13 +237,6 @@ CREATE TABLE `Trasy_Przystanki`  (
   CONSTRAINT `Trasy_Przystanki_ibfk_2` FOREIGN KEY (`id_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Trasy_Przystanki
--- ----------------------------
-
--- ----------------------------
--- Table structure for Wezwania_Do_Zaplaty
--- ----------------------------
 DROP TABLE IF EXISTS `Wezwania_Do_Zaplaty`;
 CREATE TABLE `Wezwania_Do_Zaplaty`  (
   `id_wezwania` int(11) NOT NULL AUTO_INCREMENT,
@@ -354,21 +254,12 @@ CREATE TABLE `Wezwania_Do_Zaplaty`  (
   CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_3` FOREIGN KEY (`id_statusu`) REFERENCES `Slownik_Statusow_Wezwan` (`id_statusu`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of Wezwania_Do_Zaplaty
--- ----------------------------
 INSERT INTO `Wezwania_Do_Zaplaty` VALUES (1, 1, 2, 125.00, '2026-01-22', 2);
 INSERT INTO `Wezwania_Do_Zaplaty` VALUES (2, 2, 3, 157.50, '2026-01-22', 1);
 
--- ----------------------------
--- View structure for Raport_Przychodow_Total
--- ----------------------------
 DROP VIEW IF EXISTS `Raport_Przychodow_Total`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Raport_Przychodow_Total` AS select 'Sprzedaż Biletów' AS `Typ`,sum(`Platnosci`.`kwota_brutto`) AS `Suma` from `Platnosci` union all select 'Wpływy z Mandatów' AS `Typ`,sum(`Platnosci_Wezwan`.`kwota_wplacona`) AS `Suma` from `Platnosci_Wezwan`;
 
--- ----------------------------
--- Function structure for CzyBiletWazny
--- ----------------------------
 DROP FUNCTION IF EXISTS `CzyBiletWazny`;
 delimiter ;;
 CREATE FUNCTION `CzyBiletWazny`(p_id_biletu INT, p_id_pojazdu INT)
@@ -396,9 +287,6 @@ END
 ;;
 delimiter ;
 
--- ----------------------------
--- Procedure structure for OplacMandat
--- ----------------------------
 DROP PROCEDURE IF EXISTS `OplacMandat`;
 delimiter ;;
 CREATE PROCEDURE `OplacMandat`(IN p_id_wezwania INT,
@@ -408,18 +296,15 @@ BEGIN
     DECLARE v_id_statusu_oplacone INT;
     DECLARE v_aktualny_status INT;
 
-
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN 
         ROLLBACK; 
         SELECT 'BŁĄD: Nie udało się zaksięgować wpłaty.' AS Status; 
     END;
 
-
     SELECT id_statusu INTO v_id_statusu_oplacone 
     FROM Slownik_Statusow_Wezwan 
     WHERE nazwa_statusu = 'Opłacone';
-
 
     SELECT kwota_mandatu, id_statusu INTO v_kwota_do_zaplaty, v_aktualny_status
     FROM Wezwania_Do_Zaplaty
@@ -431,11 +316,9 @@ BEGIN
             SELECT 'Mandat został już opłacony wcześniej!' AS Status;
             ROLLBACK;
         ELSE
-
             UPDATE Wezwania_Do_Zaplaty 
             SET id_statusu = v_id_statusu_oplacone 
             WHERE id_wezwania = p_id_wezwania;
-
 
             INSERT INTO Platnosci_Wezwan (id_wezwania, kwota_wplacona, id_metody)
             VALUES (p_id_wezwania, v_kwota_do_zaplaty, p_id_metody);
@@ -448,9 +331,6 @@ END
 ;;
 delimiter ;
 
--- ----------------------------
--- Procedure structure for WykonajKontrole_UczciwyMandat
--- ----------------------------
 DROP PROCEDURE IF EXISTS `WykonajKontrole_UczciwyMandat`;
 delimiter ;;
 CREATE PROCEDURE `WykonajKontrole_UczciwyMandat`(IN p_num_kontrolera VARCHAR(20),
@@ -466,7 +346,6 @@ BEGIN
     DECLARE v_id_statusu_oczekujace INT DEFAULT NULL;
     DECLARE v_error_msg TEXT;
 
-
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN 
         GET DIAGNOSTICS CONDITION 1 v_error_msg = MESSAGE_TEXT;
@@ -474,15 +353,12 @@ BEGIN
         SELECT CONCAT('BŁĄD SYSTEMOWY: ', v_error_msg) AS Status; 
     END;
 
-
     SELECT id_statusu INTO v_id_statusu_oczekujace 
     FROM Slownik_Statusow_Wezwan 
     WHERE nazwa_statusu = 'Oczekujące' LIMIT 1;
 
-
     SELECT id_kontrolera INTO v_id_kon FROM Kontrolerzy WHERE numer_sluzbowy = p_num_kontrolera LIMIT 1;
     SELECT id_pojazdu INTO v_id_poj FROM Pojazdy WHERE numer_boczny = p_num_pojazdu LIMIT 1;
-
 
     IF v_id_kon IS NULL THEN
         SELECT CONCAT('BŁĄD: Nie znaleziono kontrolera o numerze: ', p_num_kontrolera) AS Status;
@@ -491,10 +367,8 @@ BEGIN
     ELSEIF v_id_statusu_oczekujace IS NULL THEN
         SELECT 'BŁĄD: W słowniku brak statusu mandatu Oczekujące!' AS Status;
     ELSE
-
         SELECT id_biletu, id_pasazera INTO v_id_bil, v_id_pas 
         FROM Bilety_Sprzedane WHERE kod_biletu = p_kod_skanowany LIMIT 1;
-
 
         SET v_wazny = IF(v_id_bil IS NOT NULL, CzyBiletWazny(v_id_bil, v_id_poj), 0);
 
@@ -503,21 +377,17 @@ BEGIN
             IF v_wazny = 1 THEN
                 SET v_komunikat = 'BILET WAŻNY - Dziękujemy';
             ELSEIF v_id_pas IS NOT NULL THEN
-
                 SELECT COALESCE(u.procent_znizki, 0) INTO v_procent_znizki
                 FROM Pasazerowie p
                 LEFT JOIN Slownik_Ulg u ON p.id_ulgi = u.id_ulgi
                 WHERE p.id_pasazera = v_id_pas;
 
-
                 SET v_kwota_koncowa_mandatu = v_kwota_bazowa_mandatu * (1 - (v_procent_znizki / 100));
                 SET v_komunikat = CONCAT('MANDAT: ', v_kwota_koncowa_mandatu, ' PLN (Zastosowano ulgę pasażera)');
-
 
                 INSERT INTO Kontrole_Biletow (id_kontrolera, id_pojazdu, id_biletu, wynik_kontroli)
                 VALUES (v_id_kon, v_id_poj, v_id_bil, v_komunikat);
                 SET v_id_knt = LAST_INSERT_ID();
-
 
                 INSERT INTO Wezwania_Do_Zaplaty (id_kontroli, id_pasazera, kwota_mandatu, termin_platnosci, id_statusu)
                 VALUES (v_id_knt, v_id_pas, v_kwota_koncowa_mandatu, DATE_ADD(CURDATE(), INTERVAL 14 DAY), v_id_statusu_oczekujace);
