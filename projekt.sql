@@ -7,13 +7,14 @@ CREATE TABLE `Bilety_Definicje`  (
   `nazwa_biletu` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `id_strefy` int(11) NULL DEFAULT NULL,
   `cena_bazowa_brutto` decimal(10, 2) NOT NULL,
+  `czas_minuty` int(11) NOT NULL DEFAULT 60,
   PRIMARY KEY (`id_definicji`) USING BTREE,
   INDEX `id_strefy`(`id_strefy` ASC) USING BTREE,
   CONSTRAINT `Bilety_Definicje_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
-INSERT INTO `Bilety_Definicje` VALUES (1, 'Miejski (Strefa 1)', 1, 4.00);
-INSERT INTO `Bilety_Definicje` VALUES (2, 'Aglomeracyjny (Strefa 1+2)', NULL, 6.00);
+INSERT INTO `Bilety_Definicje` VALUES (1, 'Miejski (Strefa 1)', 1, 4.00, 20);
+INSERT INTO `Bilety_Definicje` VALUES (2, 'Aglomeracyjny (Strefa 2)', 2, 6.00, 60);
 
 DROP TABLE IF EXISTS `Bilety_Sprzedane`;
 CREATE TABLE `Bilety_Sprzedane`  (
@@ -30,7 +31,7 @@ CREATE TABLE `Bilety_Sprzedane`  (
   INDEX `id_pasazera`(`id_pasazera` ASC) USING BTREE,
   INDEX `id_definicji`(`id_definicji` ASC) USING BTREE,
   INDEX `id_ulgi`(`id_ulgi` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING
 PARTITION BY RANGE (YEAR(data_waznosci_od)) (
   PARTITION p2025 VALUES LESS THAN (2026),
   PARTITION p2026 VALUES LESS THAN (2027),
@@ -41,6 +42,8 @@ PARTITION BY RANGE (YEAR(data_waznosci_od)) (
 INSERT INTO `Bilety_Sprzedane` VALUES (1, 'QR-JAN-OK', 1, 1, 1, '2026-01-08 01:06:28', '2026-01-01 00:00:00', '2026-12-31 00:00:00');
 INSERT INTO `Bilety_Sprzedane` VALUES (2, 'QR-ANNA-STARY', 2, 1, 2, '2026-01-08 01:06:28', '2025-01-01 00:00:00', '2025-01-06 00:00:00');
 INSERT INTO `Bilety_Sprzedane` VALUES (3, 'QR-PIOTR-ZLA-STREFA', 3, 1, 3, '2026-01-08 01:06:28', '2026-01-01 00:00:00', '2026-12-31 00:00:00');
+INSERT INTO `Bilety_Sprzedane` VALUES (4, 'QR-101201910047968569', 1, 1, 1, '2026-01-16 21:46:12', '2026-01-16 21:46:12', '2026-01-16 22:06:12');
+INSERT INTO `Bilety_Sprzedane` VALUES (5, 'QR-101201910047968570', 1, 1, 1, '2026-01-16 21:47:40', '2026-01-16 21:47:40', '2026-01-16 22:07:40');
 
 DROP TABLE IF EXISTS `Kontrole_Biletow`;
 CREATE TABLE `Kontrole_Biletow`  (
@@ -107,11 +110,13 @@ CREATE TABLE `Platnosci`  (
   INDEX `id_metody`(`id_metody` ASC) USING BTREE,
   CONSTRAINT `Platnosci_ibfk_1` FOREIGN KEY (`id_biletu`) REFERENCES `Bilety_Sprzedane` (`id_biletu`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `Platnosci_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Platnosci` VALUES (1, 1, 3.70, 8.00, 4.00, 2, '2026-01-08 01:06:28');
 INSERT INTO `Platnosci` VALUES (2, 2, 1.85, 8.00, 2.00, 1, '2026-01-08 01:06:28');
 INSERT INTO `Platnosci` VALUES (3, 3, 2.33, 8.00, 2.52, 1, '2026-01-08 01:06:28');
+INSERT INTO `Platnosci` VALUES (4, 4, 3.70, 8.00, 4.00, 1, '2026-01-16 21:46:12');
+INSERT INTO `Platnosci` VALUES (5, 5, 3.70, 8.00, 4.00, 1, '2026-01-16 21:47:40');
 
 DROP TABLE IF EXISTS `Platnosci_Wezwan`;
 CREATE TABLE `Platnosci_Wezwan`  (
@@ -176,8 +181,9 @@ CREATE TABLE `Slownik_Statusow_Wezwan`  (
   `nazwa_statusu` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   PRIMARY KEY (`id_statusu`) USING BTREE,
   UNIQUE INDEX `nazwa_statusu`(`nazwa_statusu` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
+INSERT INTO `Slownik_Statusow_Wezwan` VALUES (3, 'Anulowane');
 INSERT INTO `Slownik_Statusow_Wezwan` VALUES (1, 'Oczekujące');
 INSERT INTO `Slownik_Statusow_Wezwan` VALUES (2, 'Opłacone');
 
@@ -271,12 +277,10 @@ CREATE FUNCTION `CzyBiletWazny`(p_id_biletu INT, p_id_pojazdu INT)
 BEGIN
     DECLARE v_strefa_pojazdu INT;
     DECLARE v_czy_ok TINYINT(1) DEFAULT 0;
-
     SELECT pr.id_strefy INTO v_strefa_pojazdu
     FROM Pojazdy poj 
     JOIN Przystanki pr ON poj.id_aktualnego_przystanku = pr.id_przystanku
     WHERE poj.id_pojazdu = p_id_pojazdu;
-
     SELECT COUNT(*) INTO v_czy_ok
     FROM Bilety_Sprzedane b
     JOIN Bilety_Definicje d ON b.id_definicji = d.id_definicji
@@ -298,23 +302,18 @@ BEGIN
     DECLARE v_kwota_do_zaplaty DECIMAL(10, 2);
     DECLARE v_id_statusu_oplacone INT;
     DECLARE v_aktualny_status INT;
-
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN 
         ROLLBACK; 
         SELECT 'BŁĄD: Nie udało się zaksięgować wpłaty.' AS Status; 
     END;
-
     SELECT id_statusu INTO v_id_statusu_oplacone 
     FROM Slownik_Statusow_Wezwan 
     WHERE nazwa_statusu = 'Opłacone';
-
     SELECT kwota_mandatu, id_statusu INTO v_kwota_do_zaplaty, v_aktualny_status
     FROM Wezwania_Do_Zaplaty
     WHERE id_wezwania = p_id_wezwania;
-
     START TRANSACTION;
-
         IF v_aktualny_status = v_id_statusu_oplacone THEN
             SELECT 'Mandat został już opłacony wcześniej!' AS Status;
             ROLLBACK;
@@ -322,14 +321,11 @@ BEGIN
             UPDATE Wezwania_Do_Zaplaty 
             SET id_statusu = v_id_statusu_oplacone 
             WHERE id_wezwania = p_id_wezwania;
-
             INSERT INTO Platnosci_Wezwan (id_wezwania, kwota_wplacona, id_metody)
             VALUES (p_id_wezwania, v_kwota_do_zaplaty, p_id_metody);
-
             COMMIT;
             SELECT CONCAT('Sukces! Zaksięgowano wpłatę w wysokości: ', v_kwota_do_zaplaty, ' PLN') AS Status;
         END IF;
-
 END
 ;;
 delimiter ;
@@ -348,21 +344,17 @@ BEGIN
     DECLARE v_komunikat VARCHAR(150);
     DECLARE v_id_statusu_oczekujace INT DEFAULT NULL;
     DECLARE v_error_msg TEXT;
-
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN 
         GET DIAGNOSTICS CONDITION 1 v_error_msg = MESSAGE_TEXT;
         ROLLBACK; 
         SELECT CONCAT('BŁĄD SYSTEMOWY: ', v_error_msg) AS Status; 
     END;
-
     SELECT id_statusu INTO v_id_statusu_oczekujace 
     FROM Slownik_Statusow_Wezwan 
     WHERE nazwa_statusu = 'Oczekujące' LIMIT 1;
-
     SELECT id_kontrolera INTO v_id_kon FROM Kontrolerzy WHERE numer_sluzbowy = p_num_kontrolera LIMIT 1;
     SELECT id_pojazdu INTO v_id_poj FROM Pojazdy WHERE numer_boczny = p_num_pojazdu LIMIT 1;
-
     IF v_id_kon IS NULL THEN
         SELECT CONCAT('BŁĄD: Nie znaleziono kontrolera o numerze: ', p_num_kontrolera) AS Status;
     ELSEIF v_id_poj IS NULL THEN
@@ -372,11 +364,8 @@ BEGIN
     ELSE
         SELECT id_biletu, id_pasazera INTO v_id_bil, v_id_pas 
         FROM Bilety_Sprzedane WHERE kod_biletu = p_kod_skanowany LIMIT 1;
-
         SET v_wazny = IF(v_id_bil IS NOT NULL, CzyBiletWazny(v_id_bil, v_id_poj), 0);
-
         START TRANSACTION;
-
             IF v_wazny = 1 THEN
                 SET v_komunikat = 'BILET WAŻNY - Dziękujemy';
                 INSERT INTO Kontrole_Biletow (id_kontrolera, id_pojazdu, id_biletu, wynik_kontroli)
@@ -386,22 +375,17 @@ BEGIN
                 FROM Pasazerowie p
                 LEFT JOIN Slownik_Ulg u ON p.id_ulgi = u.id_ulgi
                 WHERE p.id_pasazera = v_id_pas;
-
                 SET v_kwota_koncowa_mandatu = v_kwota_bazowa_mandatu * (1 - (v_procent_znizki / 100));
                 SET v_komunikat = CONCAT('MANDAT: ', v_kwota_koncowa_mandatu, ' PLN (Zastosowano ulgę pasażera)');
-
                 INSERT INTO Kontrole_Biletow (id_kontrolera, id_pojazdu, id_biletu, wynik_kontroli)
                 VALUES (v_id_kon, v_id_poj, v_id_bil, v_komunikat);
                 SET v_id_knt = LAST_INSERT_ID();
-
                 INSERT INTO Wezwania_Do_Zaplaty (id_kontroli, id_pasazera, kwota_mandatu, termin_platnosci, id_statusu)
                 VALUES (v_id_knt, v_id_pas, v_kwota_koncowa_mandatu, DATE_ADD(CURDATE(), INTERVAL 14 DAY), v_id_statusu_oczekujace);
             ELSE
                 SET v_komunikat = 'BŁĄD: Nieznany kod biletu - brak danych pasażera';
             END IF;
-
         COMMIT;
-        
         SELECT v_komunikat AS Wynik;
     END IF;
 END
@@ -461,5 +445,96 @@ BEGIN
 END
 ;;
 delimiter ;
+
+DROP PROCEDURE IF EXISTS `ZakupBiletu`;
+delimiter ;;
+CREATE PROCEDURE `ZakupBiletu`(IN p_id_pasazera INT,
+    IN p_id_definicji INT,
+    IN p_id_metody INT)
+BEGIN
+    DECLARE v_cena_bazowa DECIMAL(10,2);
+    DECLARE v_procent_ulgi DECIMAL(5,2);
+    DECLARE v_czas_minuty INT;
+    DECLARE v_cena_koncowa_brutto DECIMAL(10,2);
+    DECLARE v_id_nowego_biletu INT;
+    DECLARE v_id_ulgi_pasazera INT;
+    DECLARE v_kod_biletu VARCHAR(64);
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN 
+        ROLLBACK; 
+        SELECT 'BŁĄD: Zakup przerwany.' AS Status; 
+    END;
+
+    SELECT cena_bazowa_brutto, czas_minuty 
+    INTO v_cena_bazowa, v_czas_minuty 
+    FROM Bilety_Definicje 
+    WHERE id_definicji = p_id_definicji;
+    
+    SELECT p.id_ulgi, u.procent_znizki 
+    INTO v_id_ulgi_pasazera, v_procent_ulgi 
+    FROM Pasazerowie p 
+    LEFT JOIN Slownik_Ulg u ON p.id_ulgi = u.id_ulgi 
+    WHERE p.id_pasazera = p_id_pasazera;
+
+    SET v_cena_koncowa_brutto = v_cena_bazowa * (1 - (COALESCE(v_procent_ulgi, 0) / 100));
+    SET v_kod_biletu = CONCAT('QR-', UUID_SHORT());
+
+    START TRANSACTION;
+
+        INSERT INTO Bilety_Sprzedane (
+            kod_biletu, id_pasazera, id_definicji, id_ulgi, 
+            data_zakupu, data_waznosci_od, data_waznosci_do
+        ) VALUES (
+            v_kod_biletu, p_id_pasazera, p_id_definicji, v_id_ulgi_pasazera,
+            NOW(), 
+            NOW(), 
+            DATE_ADD(NOW(), INTERVAL v_czas_minuty MINUTE)
+        );
+
+        SET v_id_nowego_biletu = LAST_INSERT_ID();
+
+        INSERT INTO Platnosci (id_biletu, kwota_netto, stawka_vat, kwota_brutto, id_metody)
+        VALUES (
+            v_id_nowego_biletu, 
+            v_cena_koncowa_brutto / 1.08, 
+            8.00, 
+            v_cena_koncowa_brutto, 
+            p_id_metody
+        );
+
+    COMMIT;
+
+    SELECT 'SUKCES' AS Status, v_kod_biletu AS Kod, v_czas_minuty AS Waznosc_Minuty;
+
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table users
+-- ----------------------------
+DROP TRIGGER IF EXISTS `utworz_login`;
+delimiter ;;
+CREATE TRIGGER `utworz_login` BEFORE INSERT ON `users` FOR EACH ROW BEGIN
+IF NEW.login is NULL OR NEW.login = '' THEN
+	Set NEW.login = LOWER(CONCAT(LEFT(NEW.imie,1), NEW.nazwisko));
+END IF;
+END
+;;
+delimiter ;
+
+-- ----------------------------
+-- Triggers structure for table uzytkownicy
+-- ----------------------------
+DROP TRIGGER IF EXISTS `wersjonowanie`;
+delimiter ;;
+CREATE TRIGGER `wersjonowanie` AFTER UPDATE ON `uzytkownicy` FOR EACH ROW BEGIN
+
+INSERT INTO users_archiwum (
+id_users, login, imie, nazwisko, haslo, utworzono, modyfikowano
+) VALUES (OLD.id_uzytkownicy, OLD.login, OLD.imie, OLD.nazwisko, OLD.haslo, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+END
+;;
 
 SET FOREIGN_KEY_CHECKS = 1;
