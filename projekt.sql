@@ -280,7 +280,7 @@ BEGIN
     JOIN Platnosci p ON b.id_biletu = p.id_biletu
     WHERE b.id_biletu = p_id_biletu
       AND NOW() BETWEEN b.data_waznosci_od AND b.data_waznosci_do
-      AND (d.id_strefy = v_strefa_pojazdu OR d.id_strefy IS NULL);
+      AND (d.id_strefy = v_strefa_pojazdu OR d.id_strefy IS NULL OR v_strefa_pojazdu IS NULL);
 
     RETURN v_czy_ok;
 END
@@ -376,6 +376,8 @@ BEGIN
 
             IF v_wazny = 1 THEN
                 SET v_komunikat = 'BILET WAŻNY - Dziękujemy';
+                INSERT INTO Kontrole_Biletow (id_kontrolera, id_pojazdu, id_biletu, wynik_kontroli)
+                VALUES (v_id_kon, v_id_poj, v_id_bil, v_komunikat);
             ELSEIF v_id_pas IS NOT NULL THEN
                 SELECT COALESCE(u.procent_znizki, 0) INTO v_procent_znizki
                 FROM Pasazerowie p
