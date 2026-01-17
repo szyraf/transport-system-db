@@ -139,6 +139,8 @@ Rejestr wpłat za mandaty.
 ## 6. Widoki
 
 - **Raport_Przychodow_Total**: Podsumowanie łącznych przychodów ze sprzedaży biletów oraz wpływów z mandatów.
+- **Aktywne_Bilety**: Podsumowanie wszystkich obecnie ważnych biletów. Wykorzystuje *CTE*.
+- **Przychody_Po_Biletach**: Podsumowanie łączych przychodów ze sprzedaży biletów z podziałem na typy biletów. Wykorzystuje *CTE*.
 
 ## 7. Procedury Składowane
 

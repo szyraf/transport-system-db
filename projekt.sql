@@ -306,6 +306,12 @@ INSERT INTO `Wezwania_Do_Zaplaty` VALUES (3, 4, 6, 250.00, '2026-01-28', 1);
 DROP VIEW IF EXISTS `Raport_Przychodow_Total`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Raport_Przychodow_Total` AS select 'Sprzedaż Biletów' AS `Typ`,sum(`Platnosci`.`kwota_brutto`) AS `Suma` from `Platnosci` union all select 'Wpływy z Mandatów' AS `Typ`,sum(`Platnosci_Wezwan`.`kwota_wplacona`) AS `Suma` from `Platnosci_Wezwan`;
 
+DROP VIEW IF EXISTS `Aktywne_Bilety`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Aktywne_Bilety` AS WITH WazneBilety AS ( SELECT * FROM Bilety_Sprzedane WHERE NOW() BETWEEN data_waznosci_od AND data_waznosci_do ) SELECT wb.id_biletu, wb.id_pasazera, p.imie, p.nazwisko, su.nazwa_ulgi, ss.nazwa_strefy, wb.data_zakupu, wb.data_waznosci_do FROM WazneBilety wb JOIN Pasazerowie p ON wb.id_pasazera = p.id_pasazera JOIN Slownik_Ulg su ON wb.id_ulgi = su.id_ulgi JOIN Bilety_Definicje bd ON wb.id_definicji = bd.id_definicji JOIN Slownik_Stref ss ON bd.id_strefy = ss.id_strefy;
+
+DROP VIEW IF EXISTS `Przychody_Po_Biletach`;
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Przychody_Po_Biletach` AS WITH Sprzedaz AS ( SELECT b.id_definicji, p.kwota_brutto FROM Bilety_Sprzedane b JOIN Platnosci p ON b.id_biletu = p.id_biletu ) SELECT d.nazwa_biletu, SUM(s.kwota_brutto) AS suma_przychodow FROM Sprzedaz s JOIN Bilety_Definicje d ON s.id_definicji = d.id_definicji GROUP BY d.nazwa_biletu;
+
 DROP FUNCTION IF EXISTS `CzyBiletWazny`;
 delimiter ;;
 CREATE FUNCTION `CzyBiletWazny`(p_id_biletu INT, p_id_pojazdu INT)
