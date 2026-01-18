@@ -306,36 +306,6 @@ INSERT INTO `Wezwania_Do_Zaplaty` VALUES (3, 4, 6, 250.00, '2026-01-28', 1);
 DROP VIEW IF EXISTS `Raport_Przychodow_Total`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Raport_Przychodow_Total` AS select 'Sprzedaż Biletów' AS `Typ`,sum(`Platnosci`.`kwota_brutto`) AS `Suma` from `Platnosci` union all select 'Wpływy z Mandatów' AS `Typ`,sum(`Platnosci_Wezwan`.`kwota_wplacona`) AS `Suma` from `Platnosci_Wezwan`;
 
-DROP VIEW IF EXISTS `Aktywne_Bilety`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Aktywne_Bilety` AS WITH WazneBilety AS ( SELECT * FROM Bilety_Sprzedane WHERE NOW() BETWEEN data_waznosci_od AND data_waznosci_do ) SELECT wb.id_biletu, wb.id_pasazera, p.imie, p.nazwisko, su.nazwa_ulgi, ss.nazwa_strefy, wb.data_zakupu, wb.data_waznosci_do FROM WazneBilety wb JOIN Pasazerowie p ON wb.id_pasazera = p.id_pasazera JOIN Slownik_Ulg su ON wb.id_ulgi = su.id_ulgi JOIN Bilety_Definicje bd ON wb.id_definicji = bd.id_definicji JOIN Slownik_Stref ss ON bd.id_strefy = ss.id_strefy;
-
-DROP VIEW IF EXISTS `Przychody_Po_Biletach`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Przychody_Po_Biletach` AS WITH Sprzedaz AS ( SELECT b.id_definicji, p.kwota_brutto FROM Bilety_Sprzedane b JOIN Platnosci p ON b.id_biletu = p.id_biletu ) SELECT d.nazwa_biletu, SUM(s.kwota_brutto) AS suma_przychodow FROM Sprzedaz s JOIN Bilety_Definicje d ON s.id_definicji = d.id_definicji GROUP BY d.nazwa_biletu;
-
-DROP FUNCTION IF EXISTS `Przewidywany_Czas_Trasy`;
-delimiter ;;
-
-CREATE FUNCTION `Przewidywany_Czas_Trasy`(p_id_trasy INT)
-RETURNS TIME
-DETERMINISTIC
-BEGIN
-    DECLARE avg_predkosc_ms DECIMAL(5,2) DEFAULT 5.0;
-    DECLARE dlugosc_m DOUBLE;
-    SELECT SUM(ST_Distance_Sphere(p1.lokalizacja, p2.lokalizacja))
-    INTO dlugosc_m
-    FROM Trasy_Przystanki tp1
-    JOIN Przystanki p1 ON tp1.id_przystanku = p1.id_przystanku
-    JOIN Trasy_Przystanki tp2 ON tp2.id_trasy = tp1.id_trasy AND tp2.kolejnosc = tp1.kolejnosc + 1
-    JOIN Przystanki p2 ON tp2.id_przystanku = p2.id_przystanku
-    WHERE tp1.id_trasy = p_id_trasy;
-    RETURN SEC_TO_TIME(dlugosc_m / avg_predkosc_ms);
-END
-;;
-delimiter ;
-
-DROP VIEW IF EXISTS `Czasy_Przejechania_Tras`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Czasy_Przejechania_Tras` AS SELECT id_trasy, Przewidywany_Czas_Trasy(id_trasy) AS przewidywany_czas FROM Trasy;
-
 DROP FUNCTION IF EXISTS `CzyBiletWazny`;
 delimiter ;;
 CREATE FUNCTION `CzyBiletWazny`(p_id_biletu INT, p_id_pojazdu INT)
@@ -577,5 +547,67 @@ BEGIN
 END
 ;;
 delimiter ;
+
+DROP PROCEDURE IF EXISTS `WykonajKontrole_All`;
+delimiter ;;
+CREATE PROCEDURE `WykonajKontrole_All`()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE v_id_biletu INT;
+    DECLARE v_kod_biletu VARCHAR(64);
+    DECLARE v_kontroler VARCHAR(20);
+    DECLARE v_pojazd VARCHAR(20);
+    DECLARE v_idx_ctrl INT DEFAULT 0;
+    DECLARE v_idx_poj INT DEFAULT 0;
+    DECLARE v_count_ctrl INT;
+    DECLARE v_count_poj INT;
+    DECLARE v_count_bilety INT;
+
+    SELECT COUNT(*) INTO v_count_ctrl FROM Kontrolerzy;
+    SELECT COUNT(*) INTO v_count_poj FROM Pojazdy;
+    SELECT COUNT(*) INTO v_count_bilety 
+    FROM Bilety_Sprzedane b
+    WHERE NOT EXISTS (SELECT 1 FROM Kontrole_Biletow kb WHERE kb.id_biletu = b.id_biletu);
+
+    SET v_idx_ctrl = 0;
+    SET v_idx_poj = 0;
+    SET done = 0;
+
+    WYKONAJ_PETLE: WHILE done = 0 DO
+        IF v_count_bilety = 0 THEN
+            LEAVE WYKONAJ_PETLE;
+        END IF;
+
+        SELECT id_biletu, kod_biletu INTO v_id_biletu, v_kod_biletu
+        FROM Bilety_Sprzedane b
+        WHERE NOT EXISTS (SELECT 1 FROM Kontrole_Biletow kb WHERE kb.id_biletu = b.id_biletu)
+        ORDER BY data_zakupu
+        LIMIT 1;
+
+        SET v_idx_ctrl = (v_idx_ctrl MOD v_count_ctrl);
+        SELECT numer_sluzbowy INTO v_kontroler
+        FROM Kontrolerzy
+        ORDER BY id_kontrolera
+        LIMIT v_idx_ctrl,1;
+        SET v_idx_ctrl = v_idx_ctrl + 1;
+
+        SET v_idx_poj = (v_idx_poj MOD v_count_poj);
+        SELECT numer_boczny INTO v_pojazd
+        FROM Pojazdy
+        ORDER BY id_pojazdu
+        LIMIT v_idx_poj,1;
+        SET v_idx_poj = v_idx_poj + 1;
+
+        CALL WykonajKontrole_UczciwyMandat(v_kontroler, v_pojazd, v_kod_biletu);
+        SET v_count_bilety = v_count_bilety - 1;
+    END WHILE WYKONAJ_PETLE;
+END
+;;
+delimiter ;
+
+-- trzeba uprawnień SUPER, bez tego eventy nie działają
+-- SET GLOBAL event_scheduler = ON; 
+-- DROP EVENT IF EXISTS `Kontrola`;
+-- CREATE EVENT `Kontrola` ON SCHEDULE EVERY 3 HOUR DO CALL WykonajKontrole_All();
 
 SET FOREIGN_KEY_CHECKS = 1;
