@@ -3,14 +3,14 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `Bilety_Definicje`;
 CREATE TABLE `Bilety_Definicje`  (
-  `id_definicji` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_biletu` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `id_strefy` int(11) NULL DEFAULT NULL,
-  `cena_bazowa_brutto` decimal(10, 2) NOT NULL,
-  `czas_minuty` int(11) NOT NULL DEFAULT 60,
-  PRIMARY KEY (`id_definicji`) USING BTREE,
-  INDEX `id_strefy`(`id_strefy` ASC) USING BTREE,
-  CONSTRAINT `Bilety_Definicje_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_definicji` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_biletu` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `id_strefy` int(11) NULL DEFAULT NULL,
+    `cena_bazowa_brutto` decimal(10, 2) NOT NULL,
+    `czas_minuty` int(11) NOT NULL DEFAULT 60,
+    PRIMARY KEY (`id_definicji`) USING BTREE,
+    INDEX `id_strefy`(`id_strefy` ASC) USING BTREE,
+    CONSTRAINT `Bilety_Definicje_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Bilety_Definicje` VALUES (1, 'Miejski (Strefa 1)', 1, 4.00, 20);
@@ -19,25 +19,25 @@ INSERT INTO `Bilety_Definicje` VALUES (3, 'Nocny (Strefa 1)', 1, 5.00, 30);
 
 DROP TABLE IF EXISTS `Bilety_Sprzedane`;
 CREATE TABLE `Bilety_Sprzedane`  (
-  `id_biletu` int(11) NOT NULL AUTO_INCREMENT,
-  `kod_biletu` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `id_pasazera` int(11) NULL DEFAULT NULL,
-  `id_definicji` int(11) NULL DEFAULT NULL,
-  `id_ulgi` int(11) NULL DEFAULT NULL,
-  `data_zakupu` datetime NULL DEFAULT current_timestamp(),
-  `data_waznosci_od` datetime NOT NULL,
-  `data_waznosci_do` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`id_biletu`, `data_waznosci_od`) USING BTREE,
-  UNIQUE INDEX `kod_biletu`(`kod_biletu`, `data_waznosci_od`) USING BTREE,
-  INDEX `id_pasazera`(`id_pasazera` ASC) USING BTREE,
-  INDEX `id_definicji`(`id_definicji` ASC) USING BTREE,
-  INDEX `id_ulgi`(`id_ulgi` ASC) USING BTREE
+    `id_biletu` int(11) NOT NULL AUTO_INCREMENT,
+    `kod_biletu` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `id_pasazera` int(11) NULL DEFAULT NULL,
+    `id_definicji` int(11) NULL DEFAULT NULL,
+    `id_ulgi` int(11) NULL DEFAULT NULL,
+    `data_zakupu` datetime NULL DEFAULT current_timestamp(),
+    `data_waznosci_od` datetime NOT NULL,
+    `data_waznosci_do` datetime NULL DEFAULT NULL,
+    PRIMARY KEY (`id_biletu`, `data_waznosci_od`) USING BTREE,
+    UNIQUE INDEX `kod_biletu`(`kod_biletu`, `data_waznosci_od`) USING BTREE,
+    INDEX `id_pasazera`(`id_pasazera` ASC) USING BTREE,
+    INDEX `id_definicji`(`id_definicji` ASC) USING BTREE,
+    INDEX `id_ulgi`(`id_ulgi` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING
 PARTITION BY RANGE (YEAR(data_waznosci_od)) (
-  PARTITION p2025 VALUES LESS THAN (2026),
-  PARTITION p2026 VALUES LESS THAN (2027),
-  PARTITION p2027 VALUES LESS THAN (2028),
-  PARTITION pmax VALUES LESS THAN MAXVALUE
+    PARTITION p2025 VALUES LESS THAN (2026),
+    PARTITION p2026 VALUES LESS THAN (2027),
+    PARTITION p2027 VALUES LESS THAN (2028),
+    PARTITION pmax VALUES LESS THAN MAXVALUE
 );
 
 INSERT INTO `Bilety_Sprzedane` VALUES (1, 'QR-JAN-OK', 1, 1, 1, '2026-01-08 01:06:28', '2026-01-01 00:00:00', '2026-12-31 00:00:00');
@@ -51,18 +51,18 @@ INSERT INTO `Bilety_Sprzedane` VALUES (8, 'QR-KASIA-BLIK', 6, 1, 1, '2026-01-14 
 
 DROP TABLE IF EXISTS `Kontrole_Biletow`;
 CREATE TABLE `Kontrole_Biletow`  (
-  `id_kontroli` int(11) NOT NULL AUTO_INCREMENT,
-  `data_kontroli` datetime NULL DEFAULT current_timestamp(),
-  `id_kontrolera` int(11) NULL DEFAULT NULL,
-  `id_pojazdu` int(11) NULL DEFAULT NULL,
-  `id_biletu` int(11) NULL DEFAULT NULL,
-  `wynik_kontroli` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id_kontroli`) USING BTREE,
-  INDEX `id_kontrolera`(`id_kontrolera` ASC) USING BTREE,
-  INDEX `id_pojazdu`(`id_pojazdu` ASC) USING BTREE,
-  INDEX `id_biletu`(`id_biletu` ASC) USING BTREE,
-  CONSTRAINT `Kontrole_Biletow_ibfk_1` FOREIGN KEY (`id_kontrolera`) REFERENCES `Kontrolerzy` (`id_kontrolera`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `Kontrole_Biletow_ibfk_2` FOREIGN KEY (`id_pojazdu`) REFERENCES `Pojazdy` (`id_pojazdu`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_kontroli` int(11) NOT NULL AUTO_INCREMENT,
+    `data_kontroli` datetime NULL DEFAULT current_timestamp(),
+    `id_kontrolera` int(11) NULL DEFAULT NULL,
+    `id_pojazdu` int(11) NULL DEFAULT NULL,
+    `id_biletu` int(11) NULL DEFAULT NULL,
+    `wynik_kontroli` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+    PRIMARY KEY (`id_kontroli`) USING BTREE,
+    INDEX `id_kontrolera`(`id_kontrolera` ASC) USING BTREE,
+    INDEX `id_pojazdu`(`id_pojazdu` ASC) USING BTREE,
+    INDEX `id_biletu`(`id_biletu` ASC) USING BTREE,
+    CONSTRAINT `Kontrole_Biletow_ibfk_1` FOREIGN KEY (`id_kontrolera`) REFERENCES `Kontrolerzy` (`id_kontrolera`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `Kontrole_Biletow_ibfk_2` FOREIGN KEY (`id_pojazdu`) REFERENCES `Pojazdy` (`id_pojazdu`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Kontrole_Biletow` VALUES (1, '2026-01-08 01:14:10', 1, 1, 2, 'MANDAT: 125.00 PLN (Zastosowano ulgę pasażera)');
@@ -72,13 +72,13 @@ INSERT INTO `Kontrole_Biletow` VALUES (4, '2026-01-14 10:25:00', 3, 5, 8, 'MANDA
 
 DROP TABLE IF EXISTS `Kontrolerzy`;
 CREATE TABLE `Kontrolerzy`  (
-  `id_kontrolera` int(11) NOT NULL AUTO_INCREMENT,
-  `numer_sluzbowy` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `imie` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `nazwisko` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `aktywny` tinyint(1) NULL DEFAULT 1,
-  PRIMARY KEY (`id_kontrolera`) USING BTREE,
-  UNIQUE INDEX `numer_sluzbowy`(`numer_sluzbowy` ASC) USING BTREE
+    `id_kontrolera` int(11) NOT NULL AUTO_INCREMENT,
+    `numer_sluzbowy` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `imie` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+    `nazwisko` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+    `aktywny` tinyint(1) NULL DEFAULT 1,
+    PRIMARY KEY (`id_kontrolera`) USING BTREE,
+    UNIQUE INDEX `numer_sluzbowy`(`numer_sluzbowy` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Kontrolerzy` VALUES (1, 'K-100', 'Robert', 'Srogi', 1);
@@ -87,16 +87,16 @@ INSERT INTO `Kontrolerzy` VALUES (3, 'K-102', 'Marek', 'Sprawny', 1);
 
 DROP TABLE IF EXISTS `Pasazerowie`;
 CREATE TABLE `Pasazerowie`  (
-  `id_pasazera` int(11) NOT NULL AUTO_INCREMENT,
-  `imie` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `nazwisko` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
-  `id_ulgi` int(11) NULL DEFAULT NULL,
-  `data_rejestracji` datetime NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id_pasazera`) USING BTREE,
-  UNIQUE INDEX `email`(`email` ASC) USING BTREE,
-  INDEX `id_ulgi`(`id_ulgi` ASC) USING BTREE,
-  CONSTRAINT `Pasazerowie_ibfk_1` FOREIGN KEY (`id_ulgi`) REFERENCES `Slownik_Ulg` (`id_ulgi`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_pasazera` int(11) NOT NULL AUTO_INCREMENT,
+    `imie` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+    `nazwisko` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+    `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+    `id_ulgi` int(11) NULL DEFAULT NULL,
+    `data_rejestracji` datetime NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`id_pasazera`) USING BTREE,
+    UNIQUE INDEX `email`(`email` ASC) USING BTREE,
+    INDEX `id_ulgi`(`id_ulgi` ASC) USING BTREE,
+    CONSTRAINT `Pasazerowie_ibfk_1` FOREIGN KEY (`id_ulgi`) REFERENCES `Slownik_Ulg` (`id_ulgi`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Pasazerowie` VALUES (1, 'Jan', 'Kowalski', 'jan.kowalski@mail.com', 1, '2026-01-08 01:06:28');
@@ -108,17 +108,17 @@ INSERT INTO `Pasazerowie` VALUES (6, 'Katarzyna', 'Wójcik', 'k.wojcik@poczta.pl
 
 DROP TABLE IF EXISTS `Platnosci`;
 CREATE TABLE `Platnosci`  (
-  `id_platnosci` int(11) NOT NULL AUTO_INCREMENT,
-  `id_biletu` int(11) NULL DEFAULT NULL,
-  `kwota_netto` decimal(10, 2) NOT NULL,
-  `stawka_vat` decimal(5, 2) NULL DEFAULT 8.00,
-  `kwota_brutto` decimal(10, 2) NOT NULL,
-  `id_metody` int(11) NULL DEFAULT NULL,
-  `data_platnosci` datetime NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id_platnosci`) USING BTREE,
-  INDEX `id_biletu`(`id_biletu` ASC) USING BTREE,
-  INDEX `id_metody`(`id_metody` ASC) USING BTREE,
-  CONSTRAINT `Platnosci_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_platnosci` int(11) NOT NULL AUTO_INCREMENT,
+    `id_biletu` int(11) NULL DEFAULT NULL,
+    `kwota_netto` decimal(10, 2) NOT NULL,
+    `stawka_vat` decimal(5, 2) NULL DEFAULT 8.00,
+    `kwota_brutto` decimal(10, 2) NOT NULL,
+    `id_metody` int(11) NULL DEFAULT NULL,
+    `data_platnosci` datetime NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`id_platnosci`) USING BTREE,
+    INDEX `id_biletu`(`id_biletu` ASC) USING BTREE,
+    INDEX `id_metody`(`id_metody` ASC) USING BTREE,
+    CONSTRAINT `Platnosci_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Platnosci` VALUES (1, 1, 3.70, 8.00, 4.00, 2, '2026-01-08 01:06:28');
@@ -132,32 +132,32 @@ INSERT INTO `Platnosci` VALUES (8, 8, 3.70, 8.00, 4.00, 3, '2026-01-14 10:00:00'
 
 DROP TABLE IF EXISTS `Platnosci_Wezwan`;
 CREATE TABLE `Platnosci_Wezwan`  (
-  `id_platnosci_wezwania` int(11) NOT NULL AUTO_INCREMENT,
-  `id_wezwania` int(11) NOT NULL,
-  `kwota_wplacona` decimal(10, 2) NOT NULL,
-  `id_metody` int(11) NOT NULL,
-  `data_wplaty` datetime NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id_platnosci_wezwania`) USING BTREE,
-  INDEX `id_wezwania`(`id_wezwania` ASC) USING BTREE,
-  INDEX `id_metody`(`id_metody` ASC) USING BTREE,
-  CONSTRAINT `Platnosci_Wezwan_ibfk_1` FOREIGN KEY (`id_wezwania`) REFERENCES `Wezwania_Do_Zaplaty` (`id_wezwania`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `Platnosci_Wezwan_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_platnosci_wezwania` int(11) NOT NULL AUTO_INCREMENT,
+    `id_wezwania` int(11) NOT NULL,
+    `kwota_wplacona` decimal(10, 2) NOT NULL,
+    `id_metody` int(11) NOT NULL,
+    `data_wplaty` datetime NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`id_platnosci_wezwania`) USING BTREE,
+    INDEX `id_wezwania`(`id_wezwania` ASC) USING BTREE,
+    INDEX `id_metody`(`id_metody` ASC) USING BTREE,
+    CONSTRAINT `Platnosci_Wezwan_ibfk_1` FOREIGN KEY (`id_wezwania`) REFERENCES `Wezwania_Do_Zaplaty` (`id_wezwania`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `Platnosci_Wezwan_ibfk_2` FOREIGN KEY (`id_metody`) REFERENCES `Slownik_Metod_Platnosci` (`id_metody`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Platnosci_Wezwan` VALUES (1, 1, 125.00, 2, '2026-01-08 01:15:16');
 
 DROP TABLE IF EXISTS `Pojazdy`;
 CREATE TABLE `Pojazdy`  (
-  `id_pojazdu` int(11) NOT NULL AUTO_INCREMENT,
-  `numer_boczny` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `id_trasy` int(11) NULL DEFAULT NULL,
-  `id_aktualnego_przystanku` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_pojazdu`) USING BTREE,
-  UNIQUE INDEX `numer_boczny`(`numer_boczny` ASC) USING BTREE,
-  INDEX `id_trasy`(`id_trasy` ASC) USING BTREE,
-  INDEX `id_aktualnego_przystanku`(`id_aktualnego_przystanku` ASC) USING BTREE,
-  CONSTRAINT `Pojazdy_ibfk_1` FOREIGN KEY (`id_trasy`) REFERENCES `Trasy` (`id_trasy`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `Pojazdy_ibfk_2` FOREIGN KEY (`id_aktualnego_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_pojazdu` int(11) NOT NULL AUTO_INCREMENT,
+    `numer_boczny` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `id_trasy` int(11) NULL DEFAULT NULL,
+    `id_aktualnego_przystanku` int(11) NULL DEFAULT NULL,
+    PRIMARY KEY (`id_pojazdu`) USING BTREE,
+    UNIQUE INDEX `numer_boczny`(`numer_boczny` ASC) USING BTREE,
+    INDEX `id_trasy`(`id_trasy` ASC) USING BTREE,
+    INDEX `id_aktualnego_przystanku`(`id_aktualnego_przystanku` ASC) USING BTREE,
+    CONSTRAINT `Pojazdy_ibfk_1` FOREIGN KEY (`id_trasy`) REFERENCES `Trasy` (`id_trasy`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `Pojazdy_ibfk_2` FOREIGN KEY (`id_aktualnego_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Pojazdy` VALUES (1, 'TRAM-01', 1, 1);
@@ -168,13 +168,13 @@ INSERT INTO `Pojazdy` VALUES (5, 'TRAM-02', 1, 3);
 
 DROP TABLE IF EXISTS `Przystanki`;
 CREATE TABLE `Przystanki`  (
-  `id_przystanku` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_przystanku` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `id_strefy` int(11) NULL DEFAULT NULL,
-  `lokalizacja` point NULL,
-  PRIMARY KEY (`id_przystanku`) USING BTREE,
-  INDEX `id_strefy`(`id_strefy` ASC) USING BTREE,
-  CONSTRAINT `Przystanki_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_przystanku` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_przystanku` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `id_strefy` int(11) NULL DEFAULT NULL,
+    `lokalizacja` point NULL,
+    PRIMARY KEY (`id_przystanku`) USING BTREE,
+    INDEX `id_strefy`(`id_strefy` ASC) USING BTREE,
+    CONSTRAINT `Przystanki_ibfk_1` FOREIGN KEY (`id_strefy`) REFERENCES `Slownik_Stref` (`id_strefy`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Przystanki` VALUES (1, 'Centrum Handlowe', 1, ST_GeomFromText('POINT(19.9 50)'));
@@ -186,9 +186,9 @@ INSERT INTO `Przystanki` VALUES (6, 'Rynek', 1, ST_GeomFromText('POINT(19.93 50.
 
 DROP TABLE IF EXISTS `Slownik_Metod_Platnosci`;
 CREATE TABLE `Slownik_Metod_Platnosci`  (
-  `id_metody` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_metody` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`id_metody`) USING BTREE
+    `id_metody` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_metody` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    PRIMARY KEY (`id_metody`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Slownik_Metod_Platnosci` VALUES (1, 'Aplikacja');
@@ -197,10 +197,10 @@ INSERT INTO `Slownik_Metod_Platnosci` VALUES (3, 'BLIK');
 
 DROP TABLE IF EXISTS `Slownik_Statusow_Wezwan`;
 CREATE TABLE `Slownik_Statusow_Wezwan`  (
-  `id_statusu` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_statusu` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`id_statusu`) USING BTREE,
-  UNIQUE INDEX `nazwa_statusu`(`nazwa_statusu` ASC) USING BTREE
+    `id_statusu` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_statusu` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    PRIMARY KEY (`id_statusu`) USING BTREE,
+    UNIQUE INDEX `nazwa_statusu`(`nazwa_statusu` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Slownik_Statusow_Wezwan` VALUES (3, 'Anulowane');
@@ -209,10 +209,10 @@ INSERT INTO `Slownik_Statusow_Wezwan` VALUES (2, 'Opłacone');
 
 DROP TABLE IF EXISTS `Slownik_Stref`;
 CREATE TABLE `Slownik_Stref`  (
-  `id_strefy` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_strefy` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`id_strefy`) USING BTREE,
-  UNIQUE INDEX `nazwa_strefy`(`nazwa_strefy` ASC) USING BTREE
+    `id_strefy` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_strefy` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    PRIMARY KEY (`id_strefy`) USING BTREE,
+    UNIQUE INDEX `nazwa_strefy`(`nazwa_strefy` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Slownik_Stref` VALUES (1, 'Strefa I - Miasto');
@@ -220,10 +220,10 @@ INSERT INTO `Slownik_Stref` VALUES (2, 'Strefa II - Aglomeracja');
 
 DROP TABLE IF EXISTS `Slownik_Typow_Linii`;
 CREATE TABLE `Slownik_Typow_Linii`  (
-  `id_typu_linii` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_typu` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`id_typu_linii`) USING BTREE,
-  UNIQUE INDEX `nazwa_typu`(`nazwa_typu` ASC) USING BTREE
+    `id_typu_linii` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_typu` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    PRIMARY KEY (`id_typu_linii`) USING BTREE,
+    UNIQUE INDEX `nazwa_typu`(`nazwa_typu` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Slownik_Typow_Linii` VALUES (2, 'Autobus');
@@ -232,10 +232,10 @@ INSERT INTO `Slownik_Typow_Linii` VALUES (3, 'Metro');
 
 DROP TABLE IF EXISTS `Slownik_Ulg`;
 CREATE TABLE `Slownik_Ulg`  (
-  `id_ulgi` int(11) NOT NULL AUTO_INCREMENT,
-  `nazwa_ulgi` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `procent_znizki` decimal(5, 2) NULL DEFAULT 0.00,
-  PRIMARY KEY (`id_ulgi`) USING BTREE
+    `id_ulgi` int(11) NOT NULL AUTO_INCREMENT,
+    `nazwa_ulgi` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `procent_znizki` decimal(5, 2) NULL DEFAULT 0.00,
+    PRIMARY KEY (`id_ulgi`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Slownik_Ulg` VALUES (1, 'Normalny', 0.00);
@@ -245,13 +245,13 @@ INSERT INTO `Slownik_Ulg` VALUES (4, 'Dziecko do 4 lat', 100.00);
 
 DROP TABLE IF EXISTS `Trasy`;
 CREATE TABLE `Trasy`  (
-  `id_trasy` int(11) NOT NULL AUTO_INCREMENT,
-  `numer_linii` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `id_typu_linii` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_trasy`) USING BTREE,
-  UNIQUE INDEX `numer_linii`(`numer_linii` ASC) USING BTREE,
-  INDEX `id_typu_linii`(`id_typu_linii` ASC) USING BTREE,
-  CONSTRAINT `Trasy_ibfk_1` FOREIGN KEY (`id_typu_linii`) REFERENCES `Slownik_Typow_Linii` (`id_typu_linii`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_trasy` int(11) NOT NULL AUTO_INCREMENT,
+    `numer_linii` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+    `id_typu_linii` int(11) NULL DEFAULT NULL,
+    PRIMARY KEY (`id_trasy`) USING BTREE,
+    UNIQUE INDEX `numer_linii`(`numer_linii` ASC) USING BTREE,
+    INDEX `id_typu_linii`(`id_typu_linii` ASC) USING BTREE,
+    CONSTRAINT `Trasy_ibfk_1` FOREIGN KEY (`id_typu_linii`) REFERENCES `Slownik_Typow_Linii` (`id_typu_linii`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Trasy` VALUES (1, '10', 1);
@@ -261,13 +261,13 @@ INSERT INTO `Trasy` VALUES (4, '150', 2);
 
 DROP TABLE IF EXISTS `Trasy_Przystanki`;
 CREATE TABLE `Trasy_Przystanki`  (
-  `id_trasy` int(11) NOT NULL,
-  `id_przystanku` int(11) NOT NULL,
-  `kolejnosc` int(11) NOT NULL,
-  PRIMARY KEY (`id_trasy`, `id_przystanku`) USING BTREE,
-  INDEX `id_przystanku`(`id_przystanku` ASC) USING BTREE,
-  CONSTRAINT `Trasy_Przystanki_ibfk_1` FOREIGN KEY (`id_trasy`) REFERENCES `Trasy` (`id_trasy`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `Trasy_Przystanki_ibfk_2` FOREIGN KEY (`id_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_trasy` int(11) NOT NULL,
+    `id_przystanku` int(11) NOT NULL,
+    `kolejnosc` int(11) NOT NULL,
+    PRIMARY KEY (`id_trasy`, `id_przystanku`) USING BTREE,
+    INDEX `id_przystanku`(`id_przystanku` ASC) USING BTREE,
+    CONSTRAINT `Trasy_Przystanki_ibfk_1` FOREIGN KEY (`id_trasy`) REFERENCES `Trasy` (`id_trasy`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `Trasy_Przystanki_ibfk_2` FOREIGN KEY (`id_przystanku`) REFERENCES `Przystanki` (`id_przystanku`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Trasy_Przystanki` VALUES (1, 1, 1);
@@ -282,19 +282,19 @@ INSERT INTO `Trasy_Przystanki` VALUES (4, 2, 2);
 
 DROP TABLE IF EXISTS `Wezwania_Do_Zaplaty`;
 CREATE TABLE `Wezwania_Do_Zaplaty`  (
-  `id_wezwania` int(11) NOT NULL AUTO_INCREMENT,
-  `id_kontroli` int(11) NOT NULL,
-  `id_pasazera` int(11) NOT NULL,
-  `kwota_mandatu` decimal(10, 2) NOT NULL,
-  `termin_platnosci` date NOT NULL,
-  `id_statusu` int(11) NOT NULL,
-  PRIMARY KEY (`id_wezwania`) USING BTREE,
-  INDEX `id_kontroli`(`id_kontroli` ASC) USING BTREE,
-  INDEX `id_pasazera`(`id_pasazera` ASC) USING BTREE,
-  INDEX `id_statusu`(`id_statusu` ASC) USING BTREE,
-  CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_1` FOREIGN KEY (`id_kontroli`) REFERENCES `Kontrole_Biletow` (`id_kontroli`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_2` FOREIGN KEY (`id_pasazera`) REFERENCES `Pasazerowie` (`id_pasazera`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_3` FOREIGN KEY (`id_statusu`) REFERENCES `Slownik_Statusow_Wezwan` (`id_statusu`) ON DELETE RESTRICT ON UPDATE RESTRICT
+    `id_wezwania` int(11) NOT NULL AUTO_INCREMENT,
+    `id_kontroli` int(11) NOT NULL,
+    `id_pasazera` int(11) NOT NULL,
+    `kwota_mandatu` decimal(10, 2) NOT NULL,
+    `termin_platnosci` date NOT NULL,
+    `id_statusu` int(11) NOT NULL,
+    PRIMARY KEY (`id_wezwania`) USING BTREE,
+    INDEX `id_kontroli`(`id_kontroli` ASC) USING BTREE,
+    INDEX `id_pasazera`(`id_pasazera` ASC) USING BTREE,
+    INDEX `id_statusu`(`id_statusu` ASC) USING BTREE,
+    CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_1` FOREIGN KEY (`id_kontroli`) REFERENCES `Kontrole_Biletow` (`id_kontroli`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_2` FOREIGN KEY (`id_pasazera`) REFERENCES `Pasazerowie` (`id_pasazera`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+    CONSTRAINT `Wezwania_Do_Zaplaty_ibfk_3` FOREIGN KEY (`id_statusu`) REFERENCES `Slownik_Statusow_Wezwan` (`id_statusu`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic WITH SYSTEM VERSIONING;
 
 INSERT INTO `Wezwania_Do_Zaplaty` VALUES (1, 1, 2, 125.00, '2026-01-22', 2);
@@ -307,8 +307,8 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Raport_Przychodow_Total`
 DROP FUNCTION IF EXISTS `CzyBiletWazny`;
 delimiter ;;
 CREATE FUNCTION `CzyBiletWazny`(p_id_biletu INT, p_id_pojazdu INT)
- RETURNS tinyint(1)
-  DETERMINISTIC
+RETURNS tinyint(1)
+DETERMINISTIC
 BEGIN
     DECLARE v_strefa_pojazdu INT;
     DECLARE v_czy_ok TINYINT(1) DEFAULT 0;
