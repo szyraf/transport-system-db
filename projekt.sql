@@ -11,7 +11,7 @@
  Target Server Version : 110601 (11.6.1-MariaDB)
  File Encoding         : 65001
 
- Date: 20/01/2026 22:18:34
+ Date: 20/01/2026 22:21:49
 */
 
 SET NAMES utf8mb4;
@@ -446,57 +446,6 @@ DROP VIEW IF EXISTS `Widok_Skutecznosc_Windykacji`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `Widok_Skutecznosc_Windykacji` AS select `p`.`id_pasazera` AS `id_pasazera`,`p`.`nazwisko` AS `nazwisko`,count(`w`.`id_wezwania`) AS `liczba_mandatow`,sum(`w`.`kwota_mandatu`) AS `suma_nalozona`,coalesce(sum(`pw`.`kwota_wplacona`),0) AS `suma_wplacona`,sum(`w`.`kwota_mandatu`) - coalesce(sum(`pw`.`kwota_wplacona`),0) AS `pozostalo_do_splaty`,round(coalesce(sum(`pw`.`kwota_wplacona`),0) / sum(`w`.`kwota_mandatu`) * 100,2) AS `procent_splat` from ((`Pasazerowie` `p` join `Wezwania_Do_Zaplaty` `w` on(`p`.`id_pasazera` = `w`.`id_pasazera`)) left join `Platnosci_Wezwan` `pw` on(`w`.`id_wezwania` = `pw`.`id_wezwania`)) group by `p`.`id_pasazera` having `liczba_mandatow` > 0;
 
 -- ----------------------------
--- Function structure for calkasin
--- ----------------------------
-DROP FUNCTION IF EXISTS `calkasin`;
-delimiter ;;
-CREATE FUNCTION `calkasin`(x1 double, x2 double)
- RETURNS double
-BEGIN
-DECLARE x double default x1;
-DECLARE w double default 0;
-DECLARE h double default 0.001;
-
-while x < x2 DO
-set w = w + poletrapezu(sin(x), sin(x+h),h);
-set x=x +h;
-end while;
-
-
-RETURN w;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for calkasinwyj
--- ----------------------------
-DROP FUNCTION IF EXISTS `calkasinwyj`;
-delimiter ;;
-CREATE FUNCTION `calkasinwyj`(x1 double, x2 double)
- RETURNS double
-BEGIN
-DECLARE x double default x1;
-DECLARE w double default 0;
-DECLARE h double default 0.001;
-
-if(x2<x1) then
-	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'x2<x1', mysql_errno = 45123;
-END IF;
-
-
-while x < x2 DO
-set w = w + poletrapezu(sin(x), sin(x+h),h);
-set x=x +h;
-end while;
-
-
-RETURN w;
-END
-;;
-delimiter ;
-
--- ----------------------------
 -- Function structure for CzyBiletWazny
 -- ----------------------------
 DROP FUNCTION IF EXISTS `CzyBiletWazny`;
@@ -520,39 +469,6 @@ BEGIN
       AND (d.id_strefy = v_strefa_pojazdu OR d.id_strefy IS NULL OR v_strefa_pojazdu IS NULL);
 
     RETURN v_czy_ok;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Procedure structure for DodajCeche
--- ----------------------------
-DROP PROCEDURE IF EXISTS `DodajCeche`;
-delimiter ;;
-CREATE PROCEDURE `DodajCeche`(IN nowa_cecha VARCHAR(50))
-BEGIN
-    -- Obsługa błędu duplikatu (kod 1062 dla MySQL)
-    DECLARE EXIT HANDLER FOR 1062
-    SELECT CONCAT('Błąd: Cecha "', nowa_cecha, '" już istnieje w bazie.') AS Komunikat;
-
-    INSERT INTO Cechy (nazwa_cechy) VALUES (nowa_cecha);
-    SELECT CONCAT('Sukces: Dodano cechę "', nowa_cecha, '".') AS Komunikat;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for KonwertujGBnaMB
--- ----------------------------
-DROP FUNCTION IF EXISTS `KonwertujGBnaMB`;
-delimiter ;;
-CREATE FUNCTION `KonwertujGBnaMB`(gb INT)
- RETURNS int(11)
-  DETERMINISTIC
-BEGIN
-    DECLARE mb INT;
-    SET mb = gb * 1024;
-    RETURN mb;
 END
 ;;
 delimiter ;
@@ -592,109 +508,6 @@ BEGIN
             COMMIT;
             SELECT CONCAT('Sukces! Zaksięgowano wpłatę w wysokości: ', v_kwota_do_zaplaty, ' PLN') AS Status;
         END IF;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for poletrapezu
--- ----------------------------
-DROP FUNCTION IF EXISTS `poletrapezu`;
-delimiter ;;
-CREATE FUNCTION `poletrapezu`(x double, p double, k double)
- RETURNS double
-BEGIN
-
-RETURN (x+p)*k/2;
-
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for polprost
--- ----------------------------
-DROP FUNCTION IF EXISTS `polprost`;
-delimiter ;;
-CREATE FUNCTION `polprost`(x double, y double)
- RETURNS double
-  DETERMINISTIC
-BEGIN
-    RETURN x*y;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for poltroj
--- ----------------------------
-DROP FUNCTION IF EXISTS `poltroj`;
-delimiter ;;
-CREATE FUNCTION `poltroj`(x double, y double, z double)
- RETURNS double
-  DETERMINISTIC
-BEGIN
-		DECLARE p double;
-		set p = (x+y+z)/2;
-    RETURN sqrt(p*(p-x)*(p-y)*(p-z));
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for silniafor
--- ----------------------------
-DROP FUNCTION IF EXISTS `silniafor`;
-delimiter ;;
-CREATE FUNCTION `silniafor`(x double)
- RETURNS int(11)
-BEGIN
-DECLARE wynik int DEFAULT 1;
-FOR i IN 2..x
-DO
-SET wynik=wynik*i;
-END FOR;
-RETURN wynik;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for silniawhile
--- ----------------------------
-DROP FUNCTION IF EXISTS `silniawhile`;
-delimiter ;;
-CREATE FUNCTION `silniawhile`(x int)
- RETURNS int(11)
-  DETERMINISTIC
-BEGIN
-DECLARE wynik int DEFAULT 1;
-while x>0 DO
-SET wynik=wynik*x;
-SET x=x-1;
-END WHILE;
-RETURN wynik;
-END
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for sintaylor
--- ----------------------------
-DROP FUNCTION IF EXISTS `sintaylor`;
-delimiter ;;
-CREATE FUNCTION `sintaylor`(x double)
- RETURNS double
-BEGIN
-DECLARE w double default 0;
-
-SET x = MOD(x+PI(),2*PI()) - PI();
-
-for n in 0..9 DO
-set w = w+pow(-1,n) * pow(x,2*n+1)/silniafor(2*n+1);
-end for;
-
-RETURN w;
 END
 ;;
 delimiter ;
