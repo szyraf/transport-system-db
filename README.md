@@ -167,6 +167,9 @@ Przechowuje automatycznie generowane raporty tygodniowe z agregacją danych za c
 - **Widok_Rentownosc_Linii**: Podsumowanie przychodów w podziale na linie.
 - **Widok_Skutecznosc_Windykacji**: Podsumowanie informacji spłacaniu mandatów.
 - **Czasy_Przejechania_Tras**: Podsumowanie średniego czasu potrzebnego na przejechanie trasy.
+- **Aktualna_Pozycja_Pojazdow**: Podsumowanie pozycji pojazdów w systemie.
+- **Najaktywniejsci_Pasazerowie**: Podsumowanie statystyk najbardziej aktywnych pasażerów.
+- **Struktura_Ulg_Pasazera**: Podsumowanie użycia ulg w systemie.
 - **Widok_Harmonogram_Dzisiejszy**: Wyświetla kursy zaplanowane na bieżący dzień.
 - **Widok_Harmonogram_Pelny**: Pełny rozkład jazdy ze wszystkimi kursami.
 - **Widok_Bilety_Przeterminowane**: Lista wygasłych biletów z danymi pasażerów.
